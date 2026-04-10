@@ -1,0 +1,2622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBTI</title>
+  <style>
+    :root {
+      --bg: #f5f7f9;
+      --panel: #ffffff;
+      --panel-strong: #ffffff;
+      --line: rgba(52, 63, 79, 0.1);
+      --text: #27303f;
+      --muted: #657081;
+      --accent: #2e9b92;
+      --accent-2: #3fb4a9;
+      --accent-3: #8bd9cf;
+      --accent-pink: #8e7dff;
+      --accent-yellow: #e3b341;
+      --accent-mint: #6fc8b7;
+      --shadow: 0 10px 30px rgba(30, 40, 56, 0.06);
+      --radius: 24px;
+      --radius-sm: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(63, 180, 169, 0.06), transparent 30%),
+        linear-gradient(180deg, #fbfcfd 0%, #f5f7f9 44%, #f1f4f6 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: none;
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .page {
+      width: min(1720px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 104px 0 48px;
+    }
+
+    .hero,
+    .panel,
+    .question-card,
+    .result-card,
+    .gallery-card,
+    .mini-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .app-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 80;
+      width: 100%;
+      padding: 14px 0;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 2px 0 rgba(52, 63, 79, 0.04);
+    }
+
+    .nav-inner {
+      width: min(1720px, calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 18px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #2e9b92, #3fb4a9);
+      box-shadow: 0 8px 18px rgba(46, 155, 146, 0.16);
+      border: 1px solid rgba(46, 155, 146, 0.14);
+    }
+
+    .nav-logo::before {
+      content: none;
+    }
+
+    .nav-logo::after {
+      content: none;
+    }
+
+    .nav-home {
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text);
+    }
+
+    .nav-home strong {
+      display: block;
+      font-size: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-home span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero {
+      padding: 26px 8px 18px;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .home-shell {
+      min-height: calc(100vh - 152px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 42px;
+      align-items: stretch;
+    }
+
+    .hero-copy {
+      min-width: 0;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      padding-top: 6px;
+    }
+
+    .hero-subtitle {
+      margin-top: 16px;
+      font-size: 24px;
+      line-height: 1.4;
+      color: #3e4856;
+      font-weight: 700;
+    }
+
+    .hero-main-flow {
+      margin-top: 24px;
+      display: grid;
+      gap: 34px;
+    }
+
+    .hero-visual {
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero-visual-card {
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      border-radius: 28px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbfa 100%);
+      box-shadow: 0 18px 40px rgba(30, 40, 56, 0.06);
+    }
+
+    .hero-visual-main {
+      padding: 24px;
+    }
+
+    .hero-visual-title {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .hero-visual-stack {
+      margin-top: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-visual-person {
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid rgba(52, 63, 79, 0.08);
+    }
+
+    .hero-visual-person h3 {
+      font-size: 18px;
+      margin: 0 0 6px;
+    }
+
+    .hero-visual-person p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .hero-visual-person .avatar-code {
+      min-width: 76px;
+      padding: 8px 16px 7px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-visual-note {
+      padding: 18px 20px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .hero-visual-note strong {
+      font-size: 16px;
+    }
+
+    .hero-visual-note span {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      border: 1px solid rgba(46, 155, 146, 0.14);
+      color: #4b6670;
+      font-size: 14px;
+      letter-spacing: 0.03em;
+      background: #f3fbfa;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .hero h1 {
+      margin-top: 14px;
+      font-size: clamp(48px, 7vw, 72px);
+      line-height: 1.02;
+      max-width: 700px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin-top: 0;
+      max-width: 700px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 18px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: #50606d;
+      background: #f6f8fa;
+      border: 1px solid rgba(52, 63, 79, 0.08);
+    }
+
+    .hero-stat-strip {
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .hero-stat {
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 250, 252, 0.96) 100%);
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      box-shadow: 0 10px 24px rgba(30, 40, 56, 0.04);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 24px;
+      line-height: 1;
+      color: #2d3747;
+    }
+
+    .hero-stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .hero-inline-note {
+      margin-top: auto;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .hero-inline-note strong {
+      color: #394455;
+      font-weight: 700;
+    }
+
+    .meme-strip {
+      margin-top: 38px;
+      padding: 10px 8px 0;
+      border-top: 1px solid rgba(52, 63, 79, 0.08);
+    }
+
+    .meme-strip-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .meme-strip-head h2 {
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .meme-strip-head p {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      text-align: right;
+    }
+
+    .meme-strip-cloud {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meme-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      box-shadow: 0 8px 22px rgba(30, 40, 56, 0.04);
+      color: #3d4757;
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .meme-pill strong {
+      font-size: 12px;
+      color: #2e9b92;
+      letter-spacing: 0.04em;
+    }
+
+    .meme-strip-footer {
+      margin-top: 14px;
+      color: #7b8796;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .cta-row,
+    .toolbar,
+    .result-actions,
+    .gallery-actions,
+    .summary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .cta-row {
+      margin-top: 0;
+    }
+
+    .button,
+    .ghost-button {
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 13px 18px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .button {
+      color: #ffffff;
+      background: #2e9b92;
+      box-shadow: 0 8px 20px rgba(46, 155, 146, 0.18);
+    }
+
+    .ghost-button {
+      color: var(--text);
+      background: #ffffff;
+      border-color: rgba(52, 63, 79, 0.1);
+    }
+
+    .button:hover,
+    .ghost-button:hover,
+    .option:hover,
+    .gallery-card:hover,
+    .mini-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .stats-grid,
+    .feature-grid,
+    .question-meta,
+    .result-layout,
+    .gallery-grid,
+    .mini-grid,
+    .top-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .feature-grid {
+      margin-top: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .mini-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      padding: 22px;
+      background: #ffffff;
+    }
+
+    .mini-card::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 0;
+      height: 4px;
+      border-radius: 0 0 999px 999px;
+      background: #dbe6ff;
+    }
+
+    .mini-card .label {
+      color: #6a7380;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+    }
+
+    .mini-card span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .mini-card.tone-blue::before {
+      background: linear-gradient(90deg, #6a94ff, #8bb2ff);
+    }
+
+    .mini-card.tone-pink::before {
+      background: linear-gradient(90deg, #ff8ebc, #ffb4cf);
+    }
+
+    .mini-card.tone-yellow::before {
+      background: linear-gradient(90deg, #ffca57, #ffd978);
+    }
+
+    .panel {
+      margin-top: 28px;
+      padding: 30px;
+      border-radius: 28px;
+    }
+
+    .panel h2,
+    .question-card h2,
+    .result-card h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .panel .desc,
+    .question-subtitle,
+    .muted,
+    .summary-copy {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .toolbar {
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .question-card {
+      border-radius: 28px;
+      padding: 30px;
+    }
+
+    .question-meta {
+      grid-template-columns: 1.3fr 1fr;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .progress-wrap {
+      height: 12px;
+      background: rgba(46, 155, 146, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(46, 155, 146, 0.08);
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      transition: width 0.25s ease;
+    }
+
+    .question-no {
+      color: var(--accent-2);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .question-title {
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .options {
+      display: grid;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .option {
+      width: 100%;
+      text-align: left;
+      padding: 18px 18px 18px 20px;
+      border-radius: 20px;
+      color: var(--text);
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      background: #f8fafb;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .option:hover {
+      border-color: rgba(46, 155, 146, 0.24);
+      background: #f2fbf9;
+    }
+
+    .option-index {
+      display: inline-flex;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      margin-right: 12px;
+      font-weight: 700;
+      color: #091018;
+      background: #edf7f6;
+    }
+
+    .option-text {
+      display: inline;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .result-layout {
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      align-items: start;
+      margin-top: 20px;
+    }
+
+    .result-card {
+      border-radius: 30px;
+      padding: 32px;
+    }
+
+    .role-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .role-badge-wrap {
+      flex: 0 0 auto;
+    }
+
+    .badge-chip {
+      --badge-main: #7c8cff;
+      --badge-sub: #42e8e0;
+      --badge-glow: rgba(124, 140, 255, 0.4);
+      position: relative;
+      width: 92px;
+      height: 92px;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 6px 14px rgba(37, 62, 98, 0.1));
+    }
+
+    .badge-chip.large {
+      width: 116px;
+      height: 116px;
+    }
+
+    .badge-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 248, 255, 0.96));
+      border: 1px solid rgba(61, 109, 242, 0.12);
+      overflow: hidden;
+    }
+
+    .shape-hex .badge-shell {
+      clip-path: polygon(24% 6%, 76% 6%, 96% 50%, 76% 94%, 24% 94%, 4% 50%);
+      border-radius: 22px;
+    }
+
+    .shape-octagon .badge-shell {
+      clip-path: polygon(24% 0, 76% 0, 100% 24%, 100% 76%, 76% 100%, 24% 100%, 0 76%, 0 24%);
+      border-radius: 24px;
+    }
+
+    .shape-diamond .badge-shell {
+      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      border-radius: 26px;
+    }
+
+    .shape-pill .badge-shell {
+      border-radius: 30px;
+    }
+
+    .shape-round .badge-shell {
+      border-radius: 50%;
+    }
+
+    .badge-shell::before,
+    .badge-shell::after {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .badge-shell::before {
+      border: 1px solid rgba(61, 109, 242, 0.08);
+      box-shadow: none;
+    }
+
+    .badge-shell::after {
+      content: none;
+    }
+
+    .badge-ring,
+    .badge-core,
+    .badge-mark {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .badge-ring {
+      width: 66%;
+      height: 66%;
+      border: 2px solid rgba(61, 109, 242, 0.16);
+      box-shadow: none;
+    }
+
+    .ring-dual {
+      border-radius: 30%;
+      transform: rotate(12deg);
+    }
+
+    .ring-dashed {
+      border-radius: 50%;
+      border-style: dashed;
+    }
+
+    .ring-split {
+      border-radius: 50%;
+      border-top-color: var(--badge-main);
+      border-right-color: rgba(255, 255, 255, 0.08);
+      border-bottom-color: var(--badge-sub);
+      border-left-color: transparent;
+      transform: rotate(-18deg);
+    }
+
+    .ring-square {
+      border-radius: 18px;
+    }
+
+    .ring-halo {
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(61, 109, 242, 0.06);
+    }
+
+    .badge-core {
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--badge-main), var(--badge-sub));
+      box-shadow: 0 4px 10px rgba(32, 51, 79, 0.12);
+    }
+
+    .core-dot {
+      width: 22%;
+      height: 22%;
+      border-radius: 50%;
+    }
+
+    .core-bar {
+      width: 18%;
+      height: 46%;
+      border-radius: 999px;
+    }
+
+    .core-diamond {
+      width: 28%;
+      height: 28%;
+      transform: rotate(45deg);
+    }
+
+    .core-triangle {
+      width: 0;
+      height: 0;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 28px solid var(--badge-main);
+      background: none;
+      box-shadow: none;
+      filter: drop-shadow(0 0 10px var(--badge-glow));
+    }
+
+    .core-square {
+      width: 28%;
+      height: 28%;
+      border-radius: 8px;
+    }
+
+    .core-wave {
+      width: 42%;
+      height: 12%;
+      border-radius: 999px;
+      transform: rotate(-10deg);
+    }
+
+    .badge-mark {
+      inset: 18%;
+    }
+
+    .mark-scan::before,
+    .mark-scan::after,
+    .mark-spark::before,
+    .mark-spark::after,
+    .mark-crack::before,
+    .mark-crack::after,
+    .mark-crown::before,
+    .mark-crown::after,
+    .mark-fan::before,
+    .mark-fan::after,
+    .mark-pulse::before,
+    .mark-pulse::after {
+      content: "";
+      position: absolute;
+    }
+
+    .mark-scan::before {
+      inset: 18% 8%;
+      border-top: 1px solid rgba(255, 255, 255, 0.32);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      transform: skewY(-12deg);
+    }
+
+    .mark-scan::after {
+      inset: 48% 18% auto 18%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--badge-main), transparent);
+    }
+
+    .mark-spark::before {
+      top: 10%;
+      right: 14%;
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      background: var(--badge-sub);
+      transform: rotate(45deg);
+      box-shadow: 0 0 10px var(--badge-glow);
+    }
+
+    .mark-spark::after {
+      bottom: 16%;
+      left: 18%;
+      width: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    }
+
+    .mark-crack::before {
+      inset: 16% auto 18% 44%;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.62), transparent);
+      transform: rotate(12deg);
+    }
+
+    .mark-crack::after {
+      inset: 50% 22% auto auto;
+      width: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42));
+      transform: rotate(-24deg);
+    }
+
+    .mark-crown::before {
+      top: 14%;
+      left: 50%;
+      width: 34px;
+      height: 14px;
+      transform: translateX(-50%);
+      clip-path: polygon(0 100%, 10% 26%, 28% 70%, 50% 0, 72% 70%, 90% 26%, 100% 100%);
+      background: linear-gradient(90deg, var(--badge-main), var(--badge-sub));
+    }
+
+    .mark-crown::after {
+      bottom: 16%;
+      left: 50%;
+      width: 38px;
+      height: 2px;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .mark-fan::before {
+      inset: 28% auto auto 18%;
+      width: 50px;
+      height: 24px;
+      border-top: 2px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      transform: rotate(-18deg);
+    }
+
+    .mark-fan::after {
+      inset: auto 16% 18% auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 0 10px var(--badge-glow);
+    }
+
+    .mark-pulse::before {
+      inset: 46% 16% auto 16%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0 8%, rgba(255, 255, 255, 0.45) 8% 24%, transparent 24% 32%, rgba(255, 255, 255, 0.45) 32% 54%, transparent 54%);
+    }
+
+    .mark-pulse::after {
+      inset: 22% auto auto 50%;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .badge-code-text {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(61, 109, 242, 0.14);
+      color: #355caa;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .badge-chip.large .badge-code-text {
+      bottom: 14px;
+      font-size: 12px;
+    }
+
+    .avatar-portrait {
+      width: 92px;
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar-portrait.large {
+      width: 124px;
+    }
+
+    .avatar-portrait.xlarge {
+      width: 286px;
+    }
+
+    .avatar-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 6px 14px rgba(74, 124, 255, 0.1));
+    }
+
+    .avatar-code {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 124px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(112, 154, 232, 0.2);
+      color: #2d63c9;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .role-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f6f9ff;
+      color: #355caa;
+      font-size: 13px;
+      border: 1px solid rgba(112, 154, 232, 0.16);
+    }
+
+    .role-family {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    .role-desc {
+      margin-top: 18px;
+      line-height: 1.9;
+      color: #586678;
+    }
+
+    .stats-grid {
+      margin-top: 20px;
+    }
+
+    .stat-item {
+      display: grid;
+      grid-template-columns: 120px 1fr 52px;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .stat-track {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(46, 155, 146, 0.1);
+      overflow: hidden;
+    }
+
+    .stat-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2e9b92, #65c8bb);
+    }
+
+    .stat-value {
+      text-align: right;
+      font-weight: 700;
+      color: #2d63c9;
+      font-size: 14px;
+    }
+
+    .summary-card,
+    .rank-card {
+      border-radius: 24px;
+      padding: 24px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-copy {
+      margin-top: 14px;
+      white-space: pre-line;
+    }
+
+    .top-grid {
+      margin-top: 16px;
+    }
+
+    .top-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f8fafb;
+      border: 1px solid rgba(52, 63, 79, 0.08);
+    }
+
+    .top-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .rank-no {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: #1b3d69;
+      font-size: 13px;
+      font-weight: 700;
+      background: #eef6f5;
+    }
+
+    .top-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .score-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #2e7f78;
+      background: #eef8f6;
+      border: 1px solid rgba(46, 155, 146, 0.12);
+    }
+
+    .gallery-grid {
+      margin-top: 20px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .gallery-card {
+      border-radius: 24px;
+      padding: 26px;
+      cursor: pointer;
+      min-height: 100%;
+      position: relative;
+      background: #ffffff;
+    }
+
+    .gallery-card::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      top: 0;
+      height: 4px;
+      border-radius: 0 0 999px 999px;
+      background: linear-gradient(90deg, #2e9b92, #83d6cb);
+    }
+
+    .gallery-card h3 {
+      margin-top: 16px;
+      font-size: 24px;
+    }
+
+    .gallery-card p {
+      margin-top: 14px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .detail-page {
+      display: grid;
+      gap: 22px;
+    }
+
+    .detail-hero {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      padding: 32px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .detail-avatar {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 0;
+    }
+
+    .detail-meta h2 {
+      font-size: 34px;
+      margin-top: 10px;
+    }
+
+    .detail-meta p {
+      margin-top: 14px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .detail-card {
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: var(--panel-strong);
+      box-shadow: var(--shadow);
+    }
+
+    .detail-card h3 {
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    .detail-copy {
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
+    .detail-copy + .detail-copy {
+      margin-top: 12px;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .detail-list-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #f7f9fb;
+      border: 1px solid rgba(52, 63, 79, 0.08);
+    }
+
+    .detail-subgroup + .detail-subgroup {
+      margin-top: 18px;
+    }
+
+    .detail-subtitle {
+      margin-bottom: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #485463;
+    }
+
+    .detail-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .detail-split .detail-subgroup + .detail-subgroup {
+      margin-top: 0;
+    }
+
+    .detail-split > .detail-subgroup {
+      display: flex;
+      flex-direction: column;
+      align-self: start;
+    }
+
+    .quote-box {
+      padding: 18px;
+      border-radius: 20px;
+      background: #f3fbfa;
+      border: 1px solid rgba(46, 155, 146, 0.12);
+      color: #45656a;
+      line-height: 1.9;
+      font-size: 16px;
+    }
+
+    .detail-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .card-title-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .micro-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #f7f9fb;
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .hero,
+    .panel,
+    .question-card,
+    .result-card,
+    .gallery-card,
+    .mini-card {
+      min-width: 0;
+    }
+
+    .card-name {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    .card-family {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .card-meta-row {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      border: 1px solid rgba(52, 63, 79, 0.08);
+      background: #f7f9fb;
+      color: #556171;
+    }
+
+    .meta-chip.code {
+      color: #2f7f78;
+      background: #eef8f6;
+      border-color: rgba(46, 155, 146, 0.12);
+    }
+
+    .meta-chip.label {
+      color: #5e6788;
+      background: #f3f1ff;
+      border-color: rgba(142, 125, 255, 0.14);
+    }
+
+    .meta-chip.family {
+      color: #7d6530;
+      background: #faf5e8;
+      border-color: rgba(227, 179, 65, 0.24);
+    }
+
+    .gallery-desc {
+      min-height: 132px;
+    }
+
+    .gallery-stats {
+      margin-top: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .gallery-stat {
+      display: grid;
+      grid-template-columns: 72px 1fr 40px;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .empty-note {
+      margin-top: 22px;
+      padding: 22px;
+      border-radius: 18px;
+      background: #f8fafb;
+      color: var(--muted);
+      line-height: 1.8;
+      border: 1px dashed rgba(52, 63, 79, 0.12);
+    }
+
+    @media (max-width: 900px) {
+      .hero-layout,
+      .question-meta,
+      .result-layout,
+      .detail-hero,
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-split {
+        grid-template-columns: 1fr;
+      }
+
+      .home-shell {
+        min-height: auto;
+      }
+
+      .hero-copy {
+        align-self: start;
+        display: block;
+      }
+
+      .meme-strip-head {
+        display: grid;
+      }
+
+      .meme-strip-head p {
+        text-align: left;
+      }
+
+      .hero-stat-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-inline-note {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-item {
+        grid-template-columns: 98px 1fr 48px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100%, calc(100% - 20px));
+        padding-top: 104px;
+      }
+
+      .nav-inner {
+        width: min(100%, calc(100% - 20px));
+        padding: 0;
+      }
+
+      .hero,
+      .panel,
+      .question-card,
+      .result-card,
+      .summary-card,
+      .rank-card {
+        padding: 20px;
+      }
+
+      .hero h1 {
+        font-size: 44px;
+      }
+
+      .hero-subtitle {
+        font-size: 18px;
+      }
+
+      .meme-strip {
+        margin-top: 28px;
+        padding-top: 22px;
+      }
+
+      .meme-strip-head h2 {
+        font-size: 24px;
+      }
+
+      .question-title {
+        font-size: 24px;
+      }
+
+      .role-top {
+        align-items: flex-start;
+      }
+
+      .stat-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-badges {
+        gap: 8px;
+      }
+
+      .hero-stat-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-inline-note {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual-person {
+        grid-template-columns: 70px minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div id="app"></div>
+  </div>
+
+  <script>
+    window.__ABSURD_ROLE_QUIZ_DATA__ = {
+      roles: [
+        { id: "saint", name: "圣母病晚期", emoji: "🙏", family: "自毁系 · 经典款", code: "都可以", memeCode: "OJBK", description: "牺牲自己也要原谅所有人的自我感动者，把委屈当圣餐，一边流泪一边宽恕。你总习惯把别人的过错理解成一时糊涂，把自己的崩溃解释成应该承受，仿佛只要够能忍、够会退让，就能换来世界的一点温柔回头", stability: 8, logic: 45, damage: 5, badgeStyle: { main: "#75f7d5", sub: "#a9fff2", glow: "rgba(117, 247, 213, 0.38)", shape: "pill", accent: "mint", core: "halo", ring: "halo", mark: "crown" }, avatarProfile: { gender: "female", skin: "#f3c7aa", hair: "#5870ff", top: "#c7ecdd", mood: "soft", face: "oval", hairStyle: "long", accessory: "halo" } },
+        { id: "licker", name: "舔砖家", emoji: "🐶", family: "自毁系 · 经典款", code: "求带走", memeCode: "QDF", description: "舔狗的进阶学术版，卑微到能出书，把讨好别人当成毕生事业经营。你擅长把喜欢翻译成服务、付出和随叫随到，明明已经快把尊严打包寄走，还能说服自己这只是高质量陪伴，是深情不求回报的专业素养", stability: 12, logic: 30, damage: 0, badgeStyle: { main: "#ffd36f", sub: "#fff0b0", glow: "rgba(255, 211, 111, 0.36)", shape: "round", accent: "amber", core: "dot", ring: "dashed", mark: "fan" }, avatarProfile: { gender: "male", skin: "#efc09d", hair: "#7a5a3c", top: "#f8d78c", mood: "smile", face: "round", hairStyle: "short", accessory: "none" } },
+        { id: "lovesick", name: "痴情派", emoji: "💔", family: "自毁系", code: "意难平", memeCode: "BEBE", description: "活在自己编织的苦情剧里，把对方不爱你当成勋章，越虐越上瘾。明明现实早就给出答案，内心却还在替这段感情疯狂续写番外篇，靠反复回味遗憾、放大瞬间温柔、合理化所有冷淡来维持那一点自我感动。对你来说，痛苦不是结束信号，反而像一种证明深情存在过的纪念品", stability: 20, logic: 25, damage: 10, badgeStyle: { main: "#ff7ba5", sub: "#ffbfd2", glow: "rgba(255, 123, 165, 0.38)", shape: "diamond", accent: "rose", core: "diamond", ring: "dual", mark: "crack" }, avatarProfile: { gender: "female", skin: "#f2c1a4", hair: "#7b4f8f", top: "#f9cad8", mood: "dreamy", face: "heart", hairStyle: "wave", accessory: "clip" } },
+        { id: "loner", name: "孤独患者", emoji: "🫙", family: "自毁系", code: "深夜EMO", memeCode: "EMOO", description: "将孤独这种状态文玩化，每天都在抚摸自己的寂寞，并给它拍照发朋友圈。你把安静经营得很有仪式感，久而久之甚至会把被打扰也视作一种冒犯，好像只要先习惯一个人，就能假装自己从来没有真正渴望过陪伴", stability: 60, logic: 55, damage: 0, badgeStyle: { main: "#7bb0ff", sub: "#d0e2ff", glow: "rgba(123, 176, 255, 0.34)", shape: "round", accent: "blue", core: "wave", ring: "dashed", mark: "pulse" }, avatarProfile: { gender: "male", skin: "#e8b58d", hair: "#4e5b7c", top: "#b8d5f4", mood: "calm", face: "soft", hairStyle: "side", accessory: "none" } },
+        { id: "grievance", name: "苦难理财师", emoji: "🏦", family: "自毁系", code: "记你一笔", memeCode: "JYYB", description: "擅长把遭受的委屈攒成积分，随时准备兑换他人的愧疚与补偿。你可能表面风平浪静，心里却早已建立一套精密账本，谁让你失望过、谁欠了你一句道歉、谁该在关键时刻还债，全都被你悄悄记成了情绪固定资产", stability: 40, logic: 70, damage: 35, badgeStyle: { main: "#d8ad72", sub: "#ffe7c6", glow: "rgba(216, 173, 114, 0.34)", shape: "octagon", accent: "gold", core: "square", ring: "square", mark: "scan" }, avatarProfile: { gender: "female", skin: "#e7bc98", hair: "#4c3a32", top: "#d9c2a0", mood: "smirk", face: "square", hairStyle: "bob", accessory: "glasses" } },
+        { id: "glass", name: "玻璃心", emoji: "🫧", family: "防御系 · 经典款", code: "破防了", memeCode: "PFLA", description: "情感世界的易碎品，全靠别人屏息以待才能维持完整，轻微摩擦即告碎裂。你对语气、表情和停顿有近乎显微镜级别的感知力，别人一句随口的话都可能在你脑内反复回放十几遍，最后把本来很小的波动扩写成一场内心灾难片", stability: 1, logic: 20, damage: 15, badgeStyle: { main: "#99f7ff", sub: "#edfefe", glow: "rgba(153, 247, 255, 0.4)", shape: "round", accent: "ice", core: "dot", ring: "dual", mark: "crack" }, avatarProfile: { gender: "female", skin: "#f5d0b9", hair: "#9ec7ff", top: "#dff7ff", mood: "worried", face: "round", hairStyle: "bob", accessory: "clip" } },
+        { id: "cold", name: "冷暴力艺术家", emoji: "🧊", family: "防御系 · 经典款", code: "已读冷冻", memeCode: "YDLD", description: "擅长用沉默当刀子，用消失当处刑，用没事两个字造成最大伤亡。你不是不会受伤，而是太擅长把所有情绪冻进表面平静里，让别人站在你的沉默门外瞎猜，最后把一次普通矛盾发展成一场漫长又无声的关系雪灾", stability: 85, logic: 60, damage: 72, badgeStyle: { main: "#7fa6ff", sub: "#c6d5ff", glow: "rgba(127, 166, 255, 0.4)", shape: "hex", accent: "frost", core: "bar", ring: "split", mark: "scan" }, avatarProfile: { gender: "male", skin: "#e2b38f", hair: "#4a6ca8", top: "#bdd3ff", mood: "flat", face: "sharp", hairStyle: "short", accessory: "none" } },
+        { id: "tsundere", name: "傲娇型", emoji: "😤", family: "防御系", code: "你随便", memeCode: "NSBJ", description: "明明想要得要命，却非要演你求我我才勉强接受的对手戏，成本极高。你把喜欢包装成嘴硬，把在意翻译成反话，仿佛只要先维持住体面和高位，就能避免自己显得太主动太好懂，结果常常把好好的温柔关系演成高难度猜谜游戏", stability: 35, logic: 40, damage: 20, badgeStyle: { main: "#ff9aa2", sub: "#ffd3d7", glow: "rgba(255, 154, 162, 0.36)", shape: "pill", accent: "pink", core: "bar", ring: "dual", mark: "spark" }, avatarProfile: { gender: "female", skin: "#f4c5aa", hair: "#6547a8", top: "#ffd1dd", mood: "smirk", face: "heart", hairStyle: "ponytail", accessory: "earring" } },
+        { id: "social", name: "社恐", emoji: "🚪", family: "防御系", code: "i到失联", memeCode: "I离线", description: "并不是怕人，而是怕那个在人前表现不完美的自己，是一种精密的自我厌弃。你会在见面前排练，在结束后复盘，把每一次可能出糗的细节都当成灾难预演，于是社交还没开始，体力和情绪就已经被自己提前透支掉了", stability: 55, logic: 65, damage: 5, badgeStyle: { main: "#8ba0b8", sub: "#dbe2ea", glow: "rgba(139, 160, 184, 0.34)", shape: "octagon", accent: "slate", core: "dot", ring: "square", mark: "pulse" }, avatarProfile: { gender: "male", skin: "#e8bc98", hair: "#7b8798", top: "#c6d2de", mood: "shy", face: "oval", hairStyle: "side", accessory: "glasses" } },
+        { id: "invisible", name: "小透明", emoji: "👻", family: "防御系", code: "查无此人", memeCode: "CWCY", description: "社交信号屏蔽器，通过把自己活成背景板来获取绝对安全，连存在感都舍弃了。你很少争、很少抢、很少主动把自己摆到台前，仿佛只要别人注意不到你，就没有人能真正伤害你，可时间久了，连你自己都快忘了原来你也有想被看见的时候", stability: 99, logic: 50, damage: 0, badgeStyle: { main: "#d8e2f5", sub: "#ffffff", glow: "rgba(216, 226, 245, 0.28)", shape: "diamond", accent: "ghost", core: "dot", ring: "dashed", mark: "spark" }, avatarProfile: { gender: "female", skin: "#f1ceb6", hair: "#dfe7f5", top: "#edf4ff", mood: "quiet", face: "soft", hairStyle: "long", accessory: "none" } },
+        { id: "hothead", name: "暴躁老哥", emoji: "💥", family: "失控系 · 经典款", code: "急急国王", memeCode: "JJGW", description: "纯天然喷火器，省去所有沟通成本，直接进入爆炸环节，效率极高。你最大的特点是情绪启动速度远快于理智加载速度，只要感觉被冒犯、被拖延、被误解，整个人就会原地点火，先把现场烧热，再回头考虑到底值不值得炸成这样", stability: 5, logic: 2, damage: 90, badgeStyle: { main: "#ff8147", sub: "#ffd18f", glow: "rgba(255, 129, 71, 0.42)", shape: "hex", accent: "fire", core: "triangle", ring: "split", mark: "spark" }, avatarProfile: { gender: "male", skin: "#d9a57f", hair: "#d45a2e", top: "#ffbe93", mood: "angry", face: "square", hairStyle: "spiky", accessory: "none" } },
+        { id: "bomb", name: "情绪炸弹", emoji: "💣", family: "失控系", code: "瞬间引爆", memeCode: "BZAY", description: "不定时、无征兆，你永远不知道哪颗尘埃落在他心头会引发核爆。你平时未必最吵，却很擅长把所有不爽默默囤积在内心仓库里，等到某个极小的触发点出现，之前没说出口的委屈就会连本带利一起爆开，顺便炸翻全场", stability: 10, logic: 15, damage: 95, badgeStyle: { main: "#ff5858", sub: "#ffc77a", glow: "rgba(255, 88, 88, 0.44)", shape: "octagon", accent: "lava", core: "dot", ring: "halo", mark: "pulse" }, avatarProfile: { gender: "female", skin: "#e8b691", hair: "#3b2a3b", top: "#ffb0ac", mood: "intense", face: "sharp", hairStyle: "wave", accessory: "earring" } },
+        { id: "snark", name: "阴阳怪气", emoji: "🗡️", family: "失控系", code: "懂的都懂", memeCode: "DDDD", description: "语言缝隙里的冷箭，不吐脏字也能让人如鲠在喉，是高智商的情感攻击。你不一定提高音量，但总能精准找到最让人难受的表达角度，用轻描淡写的句式完成高强度刺痛，让对方连反击都像显得自己太小题大做", stability: 70, logic: 80, damage: 78, badgeStyle: { main: "#b795ff", sub: "#f3d6ff", glow: "rgba(183, 149, 255, 0.4)", shape: "diamond", accent: "violet", core: "bar", ring: "dual", mark: "scan" }, avatarProfile: { gender: "male", skin: "#e1b692", hair: "#6f5aa8", top: "#d9ccff", mood: "smirk", face: "sharp", hairStyle: "side", accessory: "glasses" } },
+        { id: "drama", name: "作精", emoji: "⚙️", family: "失控系", code: "别管我", memeCode: "BGW", description: "情感世界的极限测试员，通过不断制造麻烦来确认对方底线，属于破坏性质保。你很难直接说我需要被爱，于是改用制造波动、抛出信号、反复试探的方式看别人会不会来救场，结果把原本可以好好说的话，变成一整套高耗能情绪压力测试", stability: 20, logic: 35, damage: 55, badgeStyle: { main: "#ff70c7", sub: "#ffe0f4", glow: "rgba(255, 112, 199, 0.4)", shape: "pill", accent: "magenta", core: "square", ring: "dual", mark: "fan" }, avatarProfile: { gender: "female", skin: "#f0bea1", hair: "#ff79bf", top: "#ffd2ec", mood: "dramatic", face: "oval", hairStyle: "ponytail", accessory: "clip" } },
+        { id: "rush", name: "暴走青年", emoji: "🚀", family: "失控系", code: "直接开冲", memeCode: "KCKC", description: "满脑子只有冲锋，至于往哪冲、为什么冲，那是冲完才想的事。你的人生逻辑是先行动再补理由，只要感觉时机一到、情绪一热、肾上腺素一响，整个人就会冲出去抢跑，仿佛停下来思考反而会显得自己输了气势和节奏", stability: 3, logic: 5, damage: 60, badgeStyle: { main: "#58d4ff", sub: "#dbfbff", glow: "rgba(88, 212, 255, 0.4)", shape: "hex", accent: "sky", core: "triangle", ring: "square", mark: "spark" }, avatarProfile: { gender: "male", skin: "#dfae86", hair: "#279ed2", top: "#bdeeff", mood: "grin", face: "square", hairStyle: "spiky", accessory: "none" } },
+        { id: "fakeawake", name: "人间清醒（假）", emoji: "🧠", family: "虚空系 · 经典款", code: "我最懂", memeCode: "WZD", description: "理论上的巨人，行动上的矮子，对所有人的问题都有精准判断，唯独看不见自己。你特别擅长在局外给出高维点评，用一套很懂人性、很懂关系、很懂世界的分析框架包住自己，但真轮到亲自下场改变时，往往又会优雅地继续原地不动", stability: 75, logic: 120, damage: 30, badgeStyle: { main: "#84ffd7", sub: "#d7fff3", glow: "rgba(132, 255, 215, 0.34)", shape: "round", accent: "aqua", core: "wave", ring: "halo", mark: "crown" }, avatarProfile: { gender: "female", skin: "#f2cab2", hair: "#7ed8cb", top: "#d8fff4", mood: "calm", face: "oval", hairStyle: "long", accessory: "crown" } },
+        { id: "echo", name: "情绪复读机", emoji: "📢", family: "虚空系 · 经典款", code: "跟风输出", memeCode: "GFSC", description: "没有灵魂的扩音器，哪里愤怒声音大就往哪里凑，是集体情绪的人形传声筒。你对群体气氛极度敏感，擅长第一时间同步热点、站队和表态，但常常还没来得及确认自己到底怎么想，就已经被更大的情绪洪流裹着往前喊完了一轮", stability: 50, logic: 10, damage: 40, badgeStyle: { main: "#8bff92", sub: "#efffe9", glow: "rgba(139, 255, 146, 0.32)", shape: "hex", accent: "lime", core: "bar", ring: "dashed", mark: "pulse" }, avatarProfile: { gender: "male", skin: "#e3b48c", hair: "#53ba5f", top: "#d8ffd2", mood: "talkative", face: "round", hairStyle: "short", accessory: "headset" } },
+        { id: "ego", name: "自信心膨胀体", emoji: "🪞", family: "虚空系 · 经典款", code: "哥即宇宙", memeCode: "YYDS", description: "自带全人类暗恋我的滤镜，一种极其环保的自给自足式自恋，完全不需要外部投入。你会自动把礼貌理解成偏爱，把关注理解成欣赏，把普通互动理解成命运安排，仿佛世界本就该为你留出高光机位，只是别人暂时还没完成觉醒而已", stability: 100, logic: 20, damage: 25, badgeStyle: { main: "#ffe168", sub: "#fff7c4", glow: "rgba(255, 225, 104, 0.4)", shape: "round", accent: "sun", core: "diamond", ring: "halo", mark: "crown" }, avatarProfile: { gender: "female", skin: "#f1c6a7", hair: "#f3c74d", top: "#fff1ae", mood: "grin", face: "heart", hairStyle: "wave", accessory: "crown" } },
+        { id: "schemer", name: "心机婊", emoji: "🎯", family: "虚空系", code: "拿捏了", memeCode: "NNL", description: "将每一寸社交空间都计算成利益分布图，是情感世界里最精密的会计师。你看关系很少只看表面热闹，更在意位置、筹码、节奏和主动权，谁在试探、谁在让步、谁在抢高位几乎逃不过你的内心推演，因此连温柔都带着一点策略性光泽", stability: 90, logic: 110, damage: 65, badgeStyle: { main: "#7c8cff", sub: "#d2d8ff", glow: "rgba(124, 140, 255, 0.42)", shape: "octagon", accent: "indigo", core: "square", ring: "split", mark: "scan" }, avatarProfile: { gender: "female", skin: "#e9b794", hair: "#283e78", top: "#c8d3ff", mood: "smirk", face: "sharp", hairStyle: "bob", accessory: "glasses" } },
+        { id: "fan", name: "迷妹/迷弟", emoji: "🌟", family: "虚空系", code: "上头文学", memeCode: "STWX", description: "放弃了自我主权，通过依附他人的光芒来照亮自己的影子，是一种温柔的自我消除。你很容易被耀眼的人吸走注意力，把欣赏迅速升级成崇拜，把对方的一点反馈当成整天续命的精神电量，最后越靠近别人的舞台，越容易把自己的位置越站越淡", stability: 40, logic: 15, damage: 20, badgeStyle: { main: "#ffca7a", sub: "#fff0d4", glow: "rgba(255, 202, 122, 0.36)", shape: "diamond", accent: "gold", core: "diamond", ring: "halo", mark: "fan" }, avatarProfile: { gender: "male", skin: "#edbf9f", hair: "#b57b34", top: "#ffe3b3", mood: "soft", face: "round", hairStyle: "curly", accessory: "headset" } }
+      ],
+      questions: [
+        {
+          id: "q01",
+          question: "消息发出去半天没人回，你的内心弹幕最接近哪一句",
+          options: [
+            { text: "他一定只是忙，我再补一条怕他漏看", scores: { licker: 3, saint: 2, lovesick: 1 } },
+            { text: "嘴上说无所谓，实际上已经默默点开对话框二十次", scores: { tsundere: 2, glass: 3, social: 1 } },
+            { text: "很好，今天开始我也进入已读冷冻模式", scores: { cold: 3, invisible: 2, snark: 1 } },
+            { text: "我已经脑补出一场关于关系边界的 TED 演讲了", scores: { fakeawake: 3, ego: 1, schemer: 1 } }
+          ]
+        },
+        {
+          id: "q02",
+          question: "朋友临时放你鸽子，你最像哪种反应",
+          options: [
+            { text: "没关系啦，下次再约，你先忙你的", scores: { saint: 3, licker: 2, loner: 1 } },
+            { text: "我记住了，这笔情绪账以后有机会再结", scores: { grievance: 3, schemer: 2, glass: 1 } },
+            { text: "嘴上不说，直接开始一整套安静消失套餐", scores: { cold: 3, invisible: 2, social: 1 } },
+            { text: "我立刻暴走重开行程，谁也别拦我", scores: { rush: 3, hothead: 2, bomb: 1 } }
+          ]
+        },
+        {
+          id: "q03",
+          question: "喜欢的人夸你一句‘你今天不一样’，你会怎么理解",
+          options: [
+            { text: "他果然开始注意我了，这就是命运开机提示音", scores: { lovesick: 3, fan: 2, ego: 1 } },
+            { text: "他是不是在暗示我以前很差，我先破防一下", scores: { glass: 3, social: 1, grievance: 1 } },
+            { text: "表面说一般般，心里已经在回放这句话三百次", scores: { tsundere: 3, lovesick: 1, ego: 1 } },
+            { text: "这是社交试探，我要根据后续语境再判断收益", scores: { schemer: 3, fakeawake: 2, snark: 1 } }
+          ]
+        },
+        {
+          id: "q04",
+          question: "群里突然开始吵架，你通常扮演什么角色",
+          options: [
+            { text: "我先出来和稀泥，哪怕自己心态已经裂开", scores: { saint: 3, licker: 1, grievance: 1 } },
+            { text: "我不站队，我只负责转发每个人的情绪给下一位", scores: { echo: 3, bomb: 1, fan: 1 } },
+            { text: "我会轻描淡写地补上一句，让场面更难收", scores: { snark: 3, schemer: 2, cold: 1 } },
+            { text: "我直接退出群聊，做一块高级背景板", scores: { invisible: 3, social: 2, loner: 1 } }
+          ]
+        },
+        {
+          id: "q05",
+          question: "半夜情绪上来时，你最像哪种人",
+          options: [
+            { text: "翻聊天记录重温自己被辜负的全过程", scores: { lovesick: 2, grievance: 3, loner: 1 } },
+            { text: "发一条若有若无的朋友圈，谁懂谁来", scores: { drama: 3, loner: 2, glass: 1 } },
+            { text: "把自己说服成清醒旁观者，顺便点评全世界", scores: { fakeawake: 3, ego: 1, snark: 1 } },
+            { text: "看见谁在线就想冲进去讲道理或发疯", scores: { bomb: 3, hothead: 2, rush: 1 } }
+          ]
+        },
+        {
+          id: "q06",
+          question: "别人对你说‘随便’，你内心最真实的翻译是",
+          options: [
+            { text: "完了，这是让我猜谜，我会输", scores: { social: 2, glass: 2, tsundere: 1 } },
+            { text: "既然随便，那我也开始表演高级冷淡", scores: { cold: 3, snark: 1, invisible: 1 } },
+            { text: "我先给出八种方案，顺便照顾到对方情绪", scores: { saint: 2, licker: 3, grievance: 1 } },
+            { text: "我理解，这叫把责任外包给空气", scores: { fakeawake: 2, schemer: 2, snark: 1 } }
+          ]
+        },
+        {
+          id: "q07",
+          question: "遇到明确喜欢的人，你更容易进入哪种状态",
+          options: [
+            { text: "主动围着对方转，仿佛自己天生带服务意识", scores: { licker: 3, fan: 2, saint: 1 } },
+            { text: "默默守护并脑补一整季苦情连续剧", scores: { lovesick: 3, loner: 1, glass: 1 } },
+            { text: "嘴硬装不在意，实际上每一句都想接住", scores: { tsundere: 3, glass: 1, ego: 1 } },
+            { text: "先分析对方价值、稳定性和投入产出比", scores: { schemer: 3, fakeawake: 2, cold: 1 } }
+          ]
+        },
+        {
+          id: "q08",
+          question: "工作里被当众指出问题，你大概率会",
+          options: [
+            { text: "当场道歉，回去自己反复自责到发酵", scores: { saint: 2, glass: 3, social: 1 } },
+            { text: "表面平静，私下把这口气存成长期资产", scores: { grievance: 3, cold: 1, schemer: 1 } },
+            { text: "马上回怼，先把对方的语气问题解决了", scores: { hothead: 3, bomb: 2, rush: 1 } },
+            { text: "我会观察全场风向，再决定站哪一边更有利", scores: { schemer: 3, echo: 1, fakeawake: 1 } }
+          ]
+        },
+        {
+          id: "q09",
+          question: "你最擅长把哪种情绪包装成高尚",
+          options: [
+            { text: "委屈，我会把它说成理解和成全", scores: { saint: 3, grievance: 1, lovesick: 1 } },
+            { text: "卑微，我会把它叫做深情和稳定付出", scores: { licker: 3, lovesick: 2, fan: 1 } },
+            { text: "疏离，我会把它包装成成熟和不打扰", scores: { cold: 3, invisible: 2, social: 1 } },
+            { text: "刻薄，我会把它说成清醒与判断力", scores: { snark: 3, fakeawake: 2, ego: 1 } }
+          ]
+        },
+        {
+          id: "q10",
+          question: "排队时有人插队，你会怎么做",
+          options: [
+            { text: "我会忍，但会在心里完整记录这场社会实验", scores: { grievance: 3, social: 1, loner: 1 } },
+            { text: "阴阳一句让他知道自己并不高贵", scores: { snark: 3, hothead: 1, schemer: 1 } },
+            { text: "直接上去对线，先冲了再说", scores: { rush: 3, hothead: 2, bomb: 1 } },
+            { text: "我悄悄后退，避免自己成为众目焦点", scores: { invisible: 2, social: 3, glass: 1 } }
+          ]
+        },
+        {
+          id: "q11",
+          question: "和人发生矛盾后，你最常用的武器是",
+          options: [
+            { text: "沉默，让空气替我造成伤害", scores: { cold: 3, invisible: 1, grievance: 1 } },
+            { text: "反复提旧账，让对方感受历史纵深", scores: { grievance: 3, drama: 2, glass: 1 } },
+            { text: "表面没事，实际上每句话都夹点刺", scores: { snark: 3, tsundere: 1, schemer: 1 } },
+            { text: "全靠情绪瞬时爆炸，后果留给明天", scores: { bomb: 3, hothead: 2, rush: 1 } }
+          ]
+        },
+        {
+          id: "q12",
+          question: "朋友半夜找你倒情绪垃圾，你大概率",
+          options: [
+            { text: "接住并安慰，哪怕我自己只剩 3% 电量", scores: { saint: 3, licker: 2, loner: 1 } },
+            { text: "先陪完，再把这份付出悄悄记入长期账户", scores: { grievance: 3, saint: 1, glass: 1 } },
+            { text: "我会给出一套人间清醒方案，但自己从不照做", scores: { fakeawake: 3, ego: 1, echo: 1 } },
+            { text: "我会装死，希望对方明白我也只是个 NPC", scores: { invisible: 3, social: 2, cold: 1 } }
+          ]
+        },
+        {
+          id: "q13",
+          question: "互联网上突然爆出热点事件，你第一反应是",
+          options: [
+            { text: "看看大多数人怎么骂，我跟上节奏就行", scores: { echo: 3, fan: 2, bomb: 1 } },
+            { text: "我能写一段看起来特别清醒的长评", scores: { fakeawake: 3, ego: 1, snark: 1 } },
+            { text: "先观察风向，再决定站队对谁有利", scores: { schemer: 3, cold: 1, snark: 1 } },
+            { text: "我真情实感上头，恨不得本人出征", scores: { fan: 3, bomb: 2, rush: 1 } }
+          ]
+        },
+        {
+          id: "q14",
+          question: "如果有人连续三天没主动找你，你会",
+          options: [
+            { text: "主动去找，并合理化成只是我也刚好想聊", scores: { licker: 3, saint: 2, lovesick: 1 } },
+            { text: "开始怀疑自己是不是说错了什么", scores: { glass: 3, social: 2, lovesick: 1 } },
+            { text: "冷着，不可能先低头，这是原则", scores: { cold: 3, tsundere: 2, ego: 1 } },
+            { text: "顺便测试一下，如果我消失谁会来捞我", scores: { drama: 3, invisible: 1, grievance: 1 } }
+          ]
+        },
+        {
+          id: "q15",
+          question: "你最容易被哪一句话点燃",
+          options: [
+            { text: "你人真好", scores: { saint: 2, licker: 2, fan: 1 } },
+            { text: "你想太多了", scores: { glass: 3, bomb: 1, grievance: 1 } },
+            { text: "你能不能正常一点", scores: { drama: 2, hothead: 2, rush: 1 } },
+            { text: "其实你没那么重要", scores: { ego: 3, hothead: 1, bomb: 1 } }
+          ]
+        },
+        {
+          id: "q16",
+          question: "你最常见的社交伪装是",
+          options: [
+            { text: "我很体贴，其实我只是怕被讨厌", scores: { saint: 2, licker: 2, social: 2 } },
+            { text: "我很独立，其实我只是懒得解释感受", scores: { cold: 2, invisible: 2, loner: 2 } },
+            { text: "我很清醒，其实我只是擅长给别人下定义", scores: { fakeawake: 3, snark: 1, schemer: 1 } },
+            { text: "我很有魅力，其实我也没打算听别人意见", scores: { ego: 3, fan: 1, tsundere: 1 } }
+          ]
+        },
+        {
+          id: "q17",
+          question: "如果朋友忘了你的生日，你最像哪种戏路",
+          options: [
+            { text: "嘴上说没关系，心里开始悄悄结算", scores: { grievance: 3, glass: 2, saint: 1 } },
+            { text: "我会故作轻松地提醒一下，看他补救诚意", scores: { tsundere: 3, schemer: 1, drama: 1 } },
+            { text: "我直接不说，往后把疏离做成艺术装置", scores: { cold: 3, invisible: 2, loner: 1 } },
+            { text: "我会发疯式拉响全世界都不爱我的警报", scores: { drama: 3, bomb: 2, lovesick: 1 } }
+          ]
+        },
+        {
+          id: "q18",
+          question: "开会需要主动发言时，你更像",
+          options: [
+            { text: "我能不说就不说，最好空气自动带过", scores: { social: 3, invisible: 2, loner: 1 } },
+            { text: "我先组织到完美再说，结果等于没说", scores: { fakeawake: 2, social: 1, glass: 1 } },
+            { text: "我会用一句带刺的话证明自己不是摆设", scores: { snark: 3, ego: 1, schemer: 1 } },
+            { text: "我不但说，还要现场带节奏", scores: { echo: 2, rush: 1, ego: 2 } }
+          ]
+        },
+        {
+          id: "q19",
+          question: "当你觉得关系快失控时，你会先做什么",
+          options: [
+            { text: "拼命加码付出，试图把裂缝缝回去", scores: { licker: 3, saint: 2, lovesick: 1 } },
+            { text: "先躲起来，至少不要让我当面难堪", scores: { social: 3, invisible: 2, glass: 1 } },
+            { text: "我会先发制人，让对方感受一下不安", scores: { drama: 2, cold: 1, schemer: 2 } },
+            { text: "直接开炸，反正静下来也只会更难受", scores: { bomb: 3, hothead: 2, rush: 1 } }
+          ]
+        },
+        {
+          id: "q20",
+          question: "你最容易在什么时刻突然觉得自己很特别",
+          options: [
+            { text: "别人礼貌性夸我一句，我能听成命运指令", scores: { ego: 3, lovesick: 1, fan: 1 } },
+            { text: "有人需要我，我就自动把自己升级成救世主", scores: { saint: 3, licker: 1, fakeawake: 1 } },
+            { text: "热门话题需要表态时，我觉得自己就是麦克风", scores: { echo: 3, ego: 1, fan: 1 } },
+            { text: "大家都不懂，我懂，这种优越感很恒温", scores: { fakeawake: 3, schemer: 2, snark: 1 } }
+          ]
+        },
+        {
+          id: "q21",
+          question: "你和前任或旧关系最像哪种相处逻辑",
+          options: [
+            { text: "虽然结束了，但我的脑内连载还没有完结", scores: { lovesick: 3, loner: 2, fan: 1 } },
+            { text: "我表面翻篇，实际在心里做年度清算", scores: { grievance: 3, cold: 1, glass: 1 } },
+            { text: "我会看似平静地发几条意味深长的动态", scores: { drama: 3, snark: 1, bomb: 1 } },
+            { text: "删得干干净净，不让任何情绪留下证据", scores: { cold: 3, invisible: 1, social: 1 } }
+          ]
+        },
+        {
+          id: "q22",
+          question: "如果突然来了一个看上去很大的机会，你会",
+          options: [
+            { text: "先冲了，细节到时候再说", scores: { rush: 3, hothead: 2, ego: 1 } },
+            { text: "先担心自己会不会搞砸，于是原地自我驳回", scores: { social: 2, glass: 2, loner: 1 } },
+            { text: "先看这件事能不能让我显得更有价值", scores: { schemer: 3, ego: 2, fakeawake: 1 } },
+            { text: "我会疯狂转发给别人讨论，但自己不一定动", scores: { echo: 3, fan: 2, fakeawake: 1 } }
+          ]
+        },
+        {
+          id: "q23",
+          question: "有人问你‘你是不是生气了’，你最像哪种回答",
+          options: [
+            { text: "没有啊，我怎么会，就是算了", scores: { cold: 3, grievance: 1, tsundere: 1 } },
+            { text: "没事，是我自己的问题，你别管我", scores: { saint: 2, drama: 2, glass: 1 } },
+            { text: "当然有，但我现在还没决定炸到什么程度", scores: { bomb: 3, hothead: 1, snark: 1 } },
+            { text: "我会先判断承认生气对我是否更有主动权", scores: { schemer: 3, fakeawake: 1, ego: 1 } }
+          ]
+        },
+        {
+          id: "q24",
+          question: "如果你的人生是一种系统提示，它最可能显示什么",
+          options: [
+            { text: "正在为他人服务，请稍后再考虑自己", scores: { saint: 2, licker: 2, fan: 1 } },
+            { text: "情绪缓存已满，随时可能不定点爆炸", scores: { bomb: 3, drama: 1, hothead: 1 } },
+            { text: "当前用户处于隐身模式，存在感已调至最低", scores: { invisible: 3, social: 2, loner: 1 } },
+            { text: "已自动切换为高维点评模式", scores: { fakeawake: 2, snark: 2, ego: 1 } }
+          ]
+        }
+      ]
+    };
+  </script>
+
+  <script>
+    const APP_DATA = window.__ABSURD_ROLE_QUIZ_DATA__;
+    const ROLE_DETAILS = {
+      saint: { quote: "我都这样了，你总不能还怪我吧", socialTip: "习惯先替所有人找理由，最后把自己劝成情绪废墟", warning: "过度原谅会把边界感磨成纸片", behaviors: ["替所有人的失误兜底", "明明受伤还在安抚别人", "把委屈说成我能理解"], relationshipStyle: ["在关系里总是先负责修复气氛", "哪怕被辜负也会主动给对方找台阶", "容易把忍耐误认成成熟和善良"], triggerScenes: ["别人示弱求助的时候", "关系发生冲突又没人愿意先低头的时候", "听到“你最好了”这种情绪委托时"], selfHelpTips: ["先分清共情和兜底不是一回事", "给自己设置拒绝的最低边界", "别把被需要误解成被爱"] },
+      licker: { quote: "你开心最重要，我都行", socialTip: "擅长用服务型人格伪装不安，越喜欢越自动降价", warning: "讨好式付出很容易把关系做成单向扶贫", behaviors: ["秒回并补发三种方案", "把对方喜好背成开卷考试", "被忽视后仍然主动示好"], relationshipStyle: ["习惯通过持续付出来证明自己值得被留下", "很少直接说需求，更多是默默加码服务", "容易把对方偶尔的回应当成巨大正反馈"], triggerScenes: ["喜欢的人态度忽冷忽热的时候", "需要竞争关注度的时候", "看到别人比自己更靠近核心位置时"], selfHelpTips: ["把喜欢从服务行为里剥离出来", "学会观察对方是否也在投入", "先保住尊严再考虑深情"] },
+      lovesick: { quote: "他不爱我，但故事不能烂尾", socialTip: "一旦投入情绪，就会在脑内无限续订虐恋番", warning: "沉迷想象中的关系，现实会越来越像配角", behaviors: ["反复回看旧聊天", "把冷淡解释成命运考验", "靠自虐式深情维持自我感动"], relationshipStyle: ["擅长把一点点心动扩写成长篇连续剧", "现实互动很少，内心剧情很多", "喜欢用坚持来证明感情的纯度"], triggerScenes: ["旧人重新出现的时候", "收到一点模糊暧昧信号的时候", "夜深人静无人打断脑补时"], selfHelpTips: ["用事实而不是脑补判断关系", "减少对旧记忆的循环消费", "承认有些故事本来就不会有下一集"] },
+      loner: { quote: "别靠近，我的寂寞需要完整保存", socialTip: "把孤独经营成一种生活方式，情绪越安静越有仪式感", warning: "过于沉浸自我封闭，会错过真实连接", behaviors: ["深夜一个人完成全部情绪流程", "收藏孤独时刻并反复回味", "人群里也自动进入离线模式"], relationshipStyle: ["喜欢和人保持温柔但可控的距离", "能表达情绪时反而更习惯独自消化", "需要被理解，但不一定愿意被靠近"], triggerScenes: ["社交结束后的空档期", "节日和深夜这种反差时段", "看到别人热闹而自己无话可说时"], selfHelpTips: ["给自己安排低强度但稳定的连接", "别把封闭包装成高级感", "允许自己偶尔向外部求助一次"] },
+      grievance: { quote: "你先欠着，我账本一直开着", socialTip: "对伤害有极强记忆力，情绪都会自动折算成未来筹码", warning: "账算太久，关系会慢慢变成清算现场", behaviors: ["当场不发作，回头精准复盘", "把付出和亏欠都按年统计", "在关键时刻拿出旧账完成绝杀"], relationshipStyle: ["很难真正翻篇，所有伤害都会形成历史档案", "表面平静，实际内心一直在计量投入产出", "习惯在关键时刻拿回失去的控制权"], triggerScenes: ["别人轻描淡写处理你的委屈时", "长期不平衡的关系积累到临界点时", "对方试图装作一切从未发生时"], selfHelpTips: ["及时表达不满而不是长期存档", "别让每段关系都变成对账现场", "把情绪释放从报复里分离出来"] },
+      glass: { quote: "我不是小题大做，我只是碎得比较快", socialTip: "对气氛和语气高度敏感，别人一个停顿都像预警信号", warning: "长期靠外部呵护稳定，情绪很容易被环境绑架", behaviors: ["一句话反复揣摩十遍", "先破防再试图假装没事", "靠删聊天或沉默自我保护"], relationshipStyle: ["非常在意细节和语气里的变化", "需要很多确认感来维持稳定", "一旦受伤就会立刻缩回防御壳里"], triggerScenes: ["对方回复变慢或语气变淡时", "被调侃却没人安抚时", "感受到自己被忽略或被比较时"], selfHelpTips: ["先核实事实，再处理感受", "减少把所有细节都解释为针对自己", "给情绪一点缓冲时间再下结论"] },
+      cold: { quote: "没事，你继续，我先冷处理你", socialTip: "擅长把情绪冻起来，让沉默代替正面冲突", warning: "逃避沟通会把误会升级成永久雪灾", behaviors: ["先已读不回建立气压差", "用疏离表达不满", "越在意越显得像无所谓"], relationshipStyle: ["不喜欢把脆弱直接摊开，宁可用距离感表达立场", "在乎越多，越容易表现得冷", "常常把撤退误当成自我保护的唯一手段"], triggerScenes: ["冲突需要正面沟通时", "被逼问真实感受时", "觉得自己可能会丢脸或失控时"], selfHelpTips: ["在彻底冷掉之前先说一句真实想法", "把沉默变成短暂停顿而不是长期消失", "沟通边界感不等于放弃表达"] },
+      tsundere: { quote: "你别多想，我也就一般在意", socialTip: "外壳永远嘴硬，内核其实一直在等对方多走一步", warning: "长期靠反话沟通，容易把喜欢演成错过", behaviors: ["表面拒绝，背后偷偷期待", "把需要藏进高冷台词里", "越被看穿越要逞强"], relationshipStyle: ["渴望被在意，但又不想表现得太好懂", "总想把主动权留在自己手里", "需要别人读懂暗示，却常常忘了别人不是测谎仪"], triggerScenes: ["面对明确的喜欢和照顾时", "被人突然看穿软肋时", "需要主动表达需求的时候"], selfHelpTips: ["减少反话，把真实需求说短一点也行", "别把体面建立在误会之上", "允许别人知道你其实也会想要"] },
+      social: { quote: "不是不想去，我只是不想当场失误", socialTip: "真正害怕的不是人，而是在他人面前版本崩掉的自己", warning: "长期自我回避会把可能性全部预先取消", behaviors: ["提前预演所有社交细节", "能线上解决绝不线下出现", "错过之后再独自复盘"], relationshipStyle: ["很想留下好印象，所以反而更容易卡顿", "对任何未知社交场景都先做风险评估", "宁愿少表现，也不想在别人面前出错"], triggerScenes: ["需要自我介绍和主动发言时", "遇到陌生群体和高压关注时", "关系还不熟却要快速建立存在感时"], selfHelpTips: ["把目标从完美表现改成完成出现", "先接受尴尬是社交的基础成本", "给自己设置低门槛练习而不是一步到位"] },
+      invisible: { quote: "最好没人发现我也在场", socialTip: "把存在感主动调低，以避免被评价、被点名、被期待", warning: "安全感建立在隐身之上，久了会忘记如何表达自己", behaviors: ["在群聊中稳定潜水", "开会时自动坐进背景层", "被夸奖也会本能想缩回去"], relationshipStyle: ["在关系里习惯做无声配角", "很少主动抢占空间，更愿意顺着别人的节奏走", "存在感低到别人有时会忽略你其实也有情绪"], triggerScenes: ["需要争取资源和关注时", "被突然点名成为焦点时", "面对需要主动表态的场合时"], selfHelpTips: ["先练习在安全场景里说出一句完整意见", "别让低存在感成为唯一保护层", "偶尔被看见不等于一定会被否定"] },
+      hothead: { quote: "别废话，先把火点起来再说", socialTip: "反应速度永远快于思考速度，情绪一来就是直线开冲", warning: "高频爆炸会让别人只记得你的火，不记得你的理", behaviors: ["冲突现场秒变主角", "先回怼再想值不值得", "用音量覆盖复杂情绪"], relationshipStyle: ["表达直接到几乎没有缓冲层", "一旦觉得被冒犯就会立刻反击", "真正的委屈常常被愤怒外壳先盖住"], triggerScenes: ["被否定、被打断、被误解时", "对方语气不耐烦时", "事情拖太久却没人推进时"], selfHelpTips: ["先降低语速再决定要不要开火", "把怒气拆成具体诉求说出来", "留一段冷却时间给真正的重点"] },
+      bomb: { quote: "我还没炸，只是在倒计时", socialTip: "表面可能平静，内里情绪已经在做裂变反应", warning: "压抑和积累过久，最终会把身边人一起卷进爆心", behaviors: ["前期沉默蓄压", "突然因为小事全面失控", "爆发后又迅速陷入空心状态"], relationshipStyle: ["不一定时时都吵，但每次爆发都来得很彻底", "平时看起来没事，其实一直在积压情绪", "别人往往只看到结果，看不到前面的漫长蓄压"], triggerScenes: ["长期忽视的小问题持续累积时", "临界点被一件小事点着时", "明明很难受却一直装正常时"], selfHelpTips: ["别等爆炸才承认自己不舒服", "把情绪拆散处理，不要一次攒满", "提前说出口比事后善后更省代价"] },
+      snark: { quote: "我没骂你，我只是表达得比较精确", socialTip: "善于用精致刻薄维持优势感，让每句话都带点轻伤效果", warning: "语言伤害会让关系在不知不觉中慢性失血", behaviors: ["用反问制造压力", "把不爽写进语气和停顿里", "越聪明越容易嘴下不留情"], relationshipStyle: ["习惯用语言优势给自己建立高位", "不爽很少直白说，更多是转成高级刺痛", "常常靠幽默感和判断力包装攻击性"], triggerScenes: ["看见别人装糊涂时", "觉得对方逻辑离谱时", "想在话语权上重新占上风时"], selfHelpTips: ["把攻击欲换成清晰表达边界", "别把刻薄误认成表达能力", "留一点台阶给别人，也给自己"] },
+      drama: { quote: "你别管我，但你最好现在就来管我", socialTip: "通过制造波动感确认自己被在意，情绪存在感永远大于事件本身", warning: "测试越多，关系的耐久度掉得越快", behaviors: ["故意抛出危险信号", "期待别人主动识别情绪", "在细节里反复验证爱意"], relationshipStyle: ["需要被持续关注才能感到安全", "越不确定关系，越容易放大情绪波动", "很会测试别人，但不一定会直接说需求"], triggerScenes: ["感觉自己被忽视的时候", "对方没有按期待回应的时候", "关系进入平淡期缺少刺激感的时候"], selfHelpTips: ["把试探改成明确表达需求", "别用制造事故确认爱意", "稳定被看见比高强度被拯救更重要"] },
+      rush: { quote: "方向先别问，冲了再说", socialTip: "行动冲动大于目标意识，人生像在持续抢跑", warning: "冲得太快会把自己也卷进后果里", behaviors: ["第一反应永远是上", "事后才补做逻辑解释", "靠速度压住犹豫和不安"], relationshipStyle: ["擅长把关系推进得很快，但不一定知道下一步是什么", "行动力强，耐心不足", "更怕停下来面对复杂感受，所以总想先往前冲"], triggerScenes: ["看到机会窗口时", "局势不明但时间很紧时", "情绪和行动一起上头时"], selfHelpTips: ["先问自己要去哪，再决定要不要冲", "给冲动加一个十秒冷静区", "速度不是全部，后果也要算进来"] },
+      fakeawake: { quote: "这事我看得很透，只是懒得动", socialTip: "擅长输出高维判断，但执行力通常停留在灵魂层面", warning: "如果只有观点没有行动，清醒就只是另一种摆烂包装", behaviors: ["精准点评所有人的问题", "对自己的人生持续按兵不动", "习惯用看透了一切收尾"], relationshipStyle: ["在关系里像个高位观察员，很少真正下场", "懂很多相处道理，但不一定自己会实践", "容易把旁观和抽离误认成成熟"], triggerScenes: ["别人来寻求建议时", "局势复杂但自己不想投入时", "需要用观点维持优越感时"], selfHelpTips: ["少一点判断，多一点行动", "别把冷眼旁观当成人间清醒", "用一个小动作证明自己真想改变"] },
+      echo: { quote: "哪边声音大，我的情绪就先去哪边", socialTip: "共鸣能力极强，但独立立场常常被集体情绪覆盖", warning: "长期复读别人的情绪，会慢慢听不见自己的声音", behaviors: ["热点一来就秒进情绪现场", "用转发表达态度", "跟着群体起伏完成表态"], relationshipStyle: ["很容易被现场情绪感染和带动", "在群体中适配能力强，但边界感容易变薄", "常常先加入情绪，再慢慢想自己到底怎么看"], triggerScenes: ["群体情绪迅速升温时", "公共议题需要立刻表态时", "身边人都在强烈输出情绪时"], selfHelpTips: ["给自己一点独立判断时间", "先问自己真实立场再发声", "别让转发代替完整思考"] },
+      ego: { quote: "不是我自信，是世界迟早会发现我值得", socialTip: "自我滤镜厚实到足以防寒，批评一般很难直接打进来", warning: "当现实和自我叙事差太远时，会出现明显认知弹窗", behaviors: ["把礼貌当偏爱", "自动默认自己是焦点", "喜欢在关系里占据主舞台"], relationshipStyle: ["需要被看见、被认可、被围绕", "很会给自己搭建高光叙事", "一旦被忽视就容易觉得世界对不起自己"], triggerScenes: ["被夸奖或被关注的时候", "需要争夺中心位置的时候", "发现别人没按自己预设欣赏自己时"], selfHelpTips: ["把自信和事实校准一下", "允许自己不是每个场景的主角", "真正的稳定感不只靠外部回声"] },
+      schemer: { quote: "情绪归情绪，局面还是要算清楚", socialTip: "对关系里的权重、位置和利益非常敏锐，擅长无声布局", warning: "如果任何关系都被算成棋局，会很难真正放松", behaviors: ["先看局势再决定态度", "擅长用话术保留主动权", "永远给自己留一手"], relationshipStyle: ["很少毫无准备地投入关系", "擅长控制节奏与信息差", "会先想清楚得失，再决定暴露多少真实自己"], triggerScenes: ["需要争位置和资源时", "关系出现利益分配时", "别人试图拿捏你而你先闻到味道时"], selfHelpTips: ["别把所有关系都当博弈训练", "尝试在安全关系里降低控制欲", "有些真诚不是亏损，是长期收益"] },
+      fan: { quote: "我不需要主角位，我靠近光就够了", socialTip: "很容易把情感投注到更亮的人身上，用崇拜补足自我空缺", warning: "长期依附会让自我轮廓越来越模糊", behaviors: ["为喜欢的人自动加滤镜", "替对方解释所有问题", "把自己的情绪交给他人发光"], relationshipStyle: ["容易在关系里主动让出中心位置", "更擅长追随、支持和投射", "越觉得对方耀眼，越容易忘记自己也需要被看见"], triggerScenes: ["遇到强人格魅力的人时", "被偶像型对象关注一下时", "自己的生活缺少方向和重心时"], selfHelpTips: ["把崇拜的一部分能量收回来投给自己", "别把别人的光当成唯一光源", "学着建立不依附任何人的自我感"] }
+    };
+    APP_DATA.roles = APP_DATA.roles.map((role) => ({ ...role, ...ROLE_DETAILS[role.id] }));
+    const ROLE_MAP = Object.fromEntries(APP_DATA.roles.map((role, index) => [role.id, { ...role, order: index }]));
+    const TOTAL_QUESTIONS = 20;
+    const LETTERS = ["A", "B", "C", "D"];
+
+    const state = {
+      currentView: "home",
+      previousView: "home",
+      selectedRoleId: "",
+      selectedQuestions: [],
+      currentQuestionIndex: 0,
+      scores: createEmptyScores(),
+      answers: [],
+      resultRoleId: "",
+      shareText: ""
+    };
+
+    function createEmptyScores() {
+      return APP_DATA.roles.reduce((result, role) => {
+        result[role.id] = 0;
+        return result;
+      }, {});
+    }
+
+    function buildNavState() {
+      return {
+        currentView: state.currentView,
+        previousView: state.previousView,
+        selectedRoleId: state.selectedRoleId,
+        resultRoleId: state.resultRoleId,
+        shareText: state.shareText
+      };
+    }
+
+    function applyNavState(nextState) {
+      if (!nextState) {
+        return;
+      }
+
+      state.currentView = nextState.currentView || "home";
+      state.previousView = nextState.previousView || "home";
+      state.selectedRoleId = nextState.selectedRoleId || "";
+      state.resultRoleId = nextState.resultRoleId || "";
+      state.shareText = nextState.shareText || "";
+    }
+
+    function syncHistory(mode = "push") {
+      if (!window.history || typeof window.history.pushState !== "function") {
+        return;
+      }
+
+      const snapshot = buildNavState();
+      if (mode === "replace" && typeof window.history.replaceState === "function") {
+        window.history.replaceState(snapshot, "", "");
+        return;
+      }
+
+      window.history.pushState(snapshot, "", "");
+    }
+
+    function shuffle(list) {
+      const copied = [...list];
+      for (let index = copied.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [copied[index], copied[swapIndex]] = [copied[swapIndex], copied[index]];
+      }
+      return copied;
+    }
+
+    function sampleQuestions(total) {
+      return shuffle(APP_DATA.questions).slice(0, total);
+    }
+
+    function resetQuizState() {
+      state.selectedQuestions = [];
+      state.currentQuestionIndex = 0;
+      state.scores = createEmptyScores();
+      state.answers = [];
+      state.resultRoleId = "";
+      state.selectedRoleId = "";
+      state.shareText = "";
+    }
+
+    function startQuiz() {
+      if (APP_DATA.questions.length < TOTAL_QUESTIONS) {
+        renderError("题库不足 20 题，当前配置无法开始测试");
+        return;
+      }
+
+      resetQuizState();
+      state.selectedQuestions = sampleQuestions(TOTAL_QUESTIONS);
+      state.currentView = "quiz";
+      syncHistory("push");
+      render();
+    }
+
+    function goHome() {
+      state.selectedRoleId = "";
+      state.currentView = "home";
+      syncHistory("push");
+      render();
+    }
+
+    function showGallery(fromView) {
+      state.previousView = fromView || state.currentView;
+      state.currentView = "gallery";
+      syncHistory("push");
+      render();
+    }
+
+    function backFromGallery() {
+      state.currentView = state.previousView || "home";
+      render();
+    }
+
+    function openRoleDetail(roleId, fromView) {
+      if (!ROLE_MAP[roleId]) {
+        return;
+      }
+
+      state.previousView = fromView || state.currentView;
+      state.selectedRoleId = roleId;
+      state.currentView = "detail";
+      syncHistory("push");
+      render();
+    }
+
+    function backFromDetail() {
+      state.currentView = state.previousView || "home";
+      render();
+    }
+
+    function restartQuiz() {
+      startQuiz();
+    }
+
+    function answerQuestion(optionIndex) {
+      const question = state.selectedQuestions[state.currentQuestionIndex];
+      const option = question && question.options[optionIndex];
+      if (!question || !option) {
+        return;
+      }
+
+      Object.entries(option.scores).forEach(([roleId, score]) => {
+        state.scores[roleId] += score;
+      });
+
+      state.answers.push({
+        questionId: question.id,
+        optionIndex,
+        scores: option.scores
+      });
+
+      if (state.currentQuestionIndex < state.selectedQuestions.length - 1) {
+        state.currentQuestionIndex += 1;
+        render();
+        return;
+      }
+
+      state.resultRoleId = getFinalRoleId();
+      state.shareText = buildShareText(ROLE_MAP[state.resultRoleId]);
+      state.currentView = "result";
+      syncHistory("push");
+      render();
+    }
+
+    function getRecentBonus(roleId) {
+      return state.answers.slice(-5).reduce((total, answer) => total + (answer.scores[roleId] || 0), 0);
+    }
+
+    function getRankedRoles() {
+      return APP_DATA.roles
+        .map((role, index) => ({
+          role,
+          total: state.scores[role.id],
+          recent: getRecentBonus(role.id),
+          tiePower: role.damage + role.logic,
+          order: index
+        }))
+        .sort((left, right) => {
+          if (right.total !== left.total) {
+            return right.total - left.total;
+          }
+          if (right.recent !== left.recent) {
+            return right.recent - left.recent;
+          }
+          if (right.tiePower !== left.tiePower) {
+            return right.tiePower - left.tiePower;
+          }
+          return left.order - right.order;
+        });
+    }
+
+    function getFinalRoleId() {
+      const [topRole] = getRankedRoles();
+      return topRole ? topRole.role.id : APP_DATA.roles[0].id;
+    }
+
+    function buildResultSummary(role) {
+      const summaryList = [
+        `检测完成：你的人格主频道锁定为【${role.name}】。`,
+        `你的核心运行逻辑是“${role.description}”。`,
+        `简而言之，你不是情绪有问题，你只是把当代人的迷惑行为练成了稳定技能。`
+      ];
+      return summaryList.join("\n");
+    }
+
+    function buildShareText(role) {
+      return [
+        "《NBTI》结果",
+        `我的迷惑身份：${role.emoji} ${role.name}`,
+        `家族归属：${role.family}`,
+        `角色代码：${role.code}`,
+        `情绪稳定性：${role.stability}%｜逻辑自洽度：${role.logic}%｜社交伤害力：${role.damage}%`,
+        `结论：${buildResultSummary(role).replace(/\n/g, " ")}`
+      ].join("\n");
+    }
+
+    async function copyShareText() {
+      if (!state.shareText) {
+        return;
+      }
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(state.shareText);
+        } else {
+          const textarea = document.createElement("textarea");
+          textarea.value = state.shareText;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+        }
+        window.alert("结果文案已复制");
+      } catch (error) {
+        window.alert("复制失败，请手动复制结果文案");
+      }
+    }
+
+    function renderProgress() {
+      const progress = ((state.currentQuestionIndex + 1) / TOTAL_QUESTIONS) * 100;
+      return `
+        <div class="question-meta">
+          <div>
+            <div class="question-no">问题 ${String(state.currentQuestionIndex + 1).padStart(2, "0")} / ${TOTAL_QUESTIONS}</div>
+            <div class="question-subtitle">每题都没有标准答案，只有更像哪一种当代迷惑行为</div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar" style="width: ${progress}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNavbar() {
+      return `
+        <header class="app-navbar">
+          <div class="nav-inner">
+            <div class="nav-brand">
+              <div class="nav-logo" aria-label="NBTI mini-logo">N</div>
+              <button class="nav-home" onclick="goHome()">
+                <strong>NBTI</strong>
+                <span>当代迷惑行为人格图鉴</span>
+              </button>
+            </div>
+            <div class="nav-links">
+              <button class="ghost-button" onclick="goHome()">首页</button>
+              <button class="ghost-button" onclick="showGallery('home')">图鉴</button>
+              <button class="button" onclick="startQuiz()">开始测试</button>
+            </div>
+          </div>
+        </header>
+      `;
+    }
+
+    function renderAvatar(role, size = "normal") {
+      const profile = role.avatarProfile;
+      const avatarClass = ["avatar-portrait", size === "large" ? "large" : "", size === "xlarge" ? "xlarge" : ""].filter(Boolean).join(" ");
+      const frame = role.badgeStyle?.sub || "#dfeeff";
+      const line = role.badgeStyle?.main || "#4a7cff";
+      const accent = role.badgeStyle?.glow || "rgba(74, 124, 255, 0.18)";
+      const topColor = profile.top;
+      const hairColor = profile.hair;
+      const skin = profile.skin;
+
+      const faceMap = {
+        oval: `<ellipse cx="60" cy="58" rx="24" ry="29" fill="${skin}" />`,
+        round: `<ellipse cx="60" cy="58" rx="26" ry="27" fill="${skin}" />`,
+        soft: `<ellipse cx="60" cy="58" rx="25" ry="28" fill="${skin}" />`,
+        square: `<rect x="36" y="31" width="48" height="56" rx="18" fill="${skin}" />`,
+        sharp: `<path d="M60 29 C77 29 87 42 87 59 C87 76 75 88 60 92 C45 88 33 76 33 59 C33 42 43 29 60 29 Z" fill="${skin}" />`,
+        heart: `<path d="M60 29 C77 29 88 41 84 59 C81 76 72 88 60 93 C48 88 39 76 36 59 C32 41 43 29 60 29 Z" fill="${skin}" />`
+      };
+
+      const hairMap = {
+        long: `<path d="M30 52 C30 30 43 20 60 20 C77 20 90 31 90 53 L86 90 C79 97 72 101 60 101 C48 101 41 97 34 90 Z" fill="${hairColor}" /><path d="M36 40 C43 28 51 24 60 24 C69 24 77 28 84 40 C78 38 72 37 60 37 C48 37 42 38 36 40 Z" fill="${hairColor}" />`,
+        short: `<path d="M33 51 C33 32 45 22 60 22 C75 22 87 32 87 49 C80 43 71 40 60 40 C49 40 40 43 33 51 Z" fill="${hairColor}" />`,
+        bob: `<path d="M30 48 C30 31 43 22 60 22 C77 22 90 31 90 49 L86 76 C80 82 74 85 60 85 C46 85 40 82 34 76 Z" fill="${hairColor}" />`,
+        side: `<path d="M30 48 C32 30 45 22 60 22 C74 22 87 30 89 47 C80 39 70 36 60 36 C51 36 43 38 35 44 Z" fill="${hairColor}" /><path d="M77 32 C82 42 84 50 82 64" stroke="${hairColor}" stroke-width="12" stroke-linecap="round" />`,
+        ponytail: `<path d="M31 49 C31 30 44 21 60 21 C76 21 89 31 89 49 C81 41 71 37 60 37 C49 37 39 41 31 49 Z" fill="${hairColor}" /><path d="M83 50 C93 60 95 77 87 90" stroke="${hairColor}" stroke-width="11" stroke-linecap="round" />`,
+        spiky: `<path d="M30 49 L38 32 L47 39 L57 24 L67 38 L77 28 L89 48 C80 41 71 38 60 38 C49 38 40 41 30 49 Z" fill="${hairColor}" />`,
+        wave: `<path d="M31 48 C33 29 45 21 61 21 C78 21 89 31 89 49 C82 39 76 36 68 35 C59 34 51 37 43 39 C39 40 35 43 31 48 Z" fill="${hairColor}" /><path d="M79 43 C88 55 89 69 83 82" stroke="${hairColor}" stroke-width="10" stroke-linecap="round" />`,
+        curly: `<path d="M33 49 C35 31 46 23 60 23 C74 23 85 31 87 48 C83 39 75 36 68 36 C61 36 53 39 47 42 C42 36 37 36 33 49 Z" fill="${hairColor}" /><circle cx="44" cy="38" r="8" fill="${hairColor}" /><circle cx="60" cy="30" r="9" fill="${hairColor}" /><circle cx="76" cy="38" r="8" fill="${hairColor}" />`
+      };
+
+      const eyesMap = {
+        soft: `<path d="M46 60 Q50 58 54 60" stroke="#2c4667" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M66 60 Q70 58 74 60" stroke="#2c4667" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+        smile: `<circle cx="50" cy="59" r="2.5" fill="#2c4667"/><circle cx="70" cy="59" r="2.5" fill="#2c4667"/>`,
+        dreamy: `<circle cx="50" cy="58" r="2.2" fill="#2c4667"/><circle cx="70" cy="58" r="2.2" fill="#2c4667"/><circle cx="54" cy="55" r="1.2" fill="#ffffff"/><circle cx="74" cy="55" r="1.2" fill="#ffffff"/>`,
+        calm: `<path d="M46 59 H54" stroke="#2c4667" stroke-width="2.2" stroke-linecap="round"/><path d="M66 59 H74" stroke="#2c4667" stroke-width="2.2" stroke-linecap="round"/>`,
+        worried: `<path d="M46 61 Q50 57 54 61" stroke="#2c4667" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M66 61 Q70 57 74 61" stroke="#2c4667" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+        flat: `<path d="M46 58 H54" stroke="#2c4667" stroke-width="2.4" stroke-linecap="round"/><path d="M66 58 H74" stroke="#2c4667" stroke-width="2.4" stroke-linecap="round"/>`,
+        shy: `<path d="M46 60 Q50 63 54 60" stroke="#2c4667" stroke-width="2.1" fill="none" stroke-linecap="round"/><path d="M66 60 Q70 63 74 60" stroke="#2c4667" stroke-width="2.1" fill="none" stroke-linecap="round"/>`,
+        quiet: `<circle cx="50" cy="59" r="2.1" fill="#2c4667"/><circle cx="70" cy="59" r="2.1" fill="#2c4667"/>`,
+        angry: `<path d="M45 57 L54 60" stroke="#2c4667" stroke-width="2.4" stroke-linecap="round"/><path d="M66 60 L75 57" stroke="#2c4667" stroke-width="2.4" stroke-linecap="round"/>`,
+        intense: `<circle cx="50" cy="58" r="2.6" fill="#2c4667"/><circle cx="70" cy="58" r="2.6" fill="#2c4667"/>`,
+        smirk: `<circle cx="50" cy="58.5" r="2.2" fill="#2c4667"/><path d="M66 58 H74" stroke="#2c4667" stroke-width="2.4" stroke-linecap="round"/>`,
+        dramatic: `<path d="M46 60 Q50 56 54 60" stroke="#2c4667" stroke-width="2.1" fill="none" stroke-linecap="round"/><circle cx="70" cy="58" r="2.3" fill="#2c4667"/>`,
+        grin: `<circle cx="50" cy="58" r="2.4" fill="#2c4667"/><circle cx="70" cy="58" r="2.4" fill="#2c4667"/>`,
+        talkative: `<circle cx="50" cy="58.5" r="2.4" fill="#2c4667"/><circle cx="70" cy="58.5" r="2.4" fill="#2c4667"/>`
+      };
+
+      const mouthMap = {
+        soft: `<path d="M50 77 Q60 82 70 77" stroke="#b75f73" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+        smile: `<path d="M49 76 Q60 85 71 76" stroke="#b75f73" stroke-width="2.4" fill="none" stroke-linecap="round"/>`,
+        dreamy: `<path d="M52 78 Q60 81 68 78" stroke="#b75f73" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+        calm: `<path d="M52 78 H68" stroke="#b75f73" stroke-width="2.1" stroke-linecap="round"/>`,
+        worried: `<path d="M51 80 Q60 75 69 80" stroke="#b75f73" stroke-width="2.1" fill="none" stroke-linecap="round"/>`,
+        flat: `<path d="M52 78 H68" stroke="#8c5a60" stroke-width="2.2" stroke-linecap="round"/>`,
+        shy: `<path d="M53 79 Q60 82 67 79" stroke="#b75f73" stroke-width="1.9" fill="none" stroke-linecap="round"/>`,
+        quiet: `<path d="M53 78 H67" stroke="#b75f73" stroke-width="1.8" stroke-linecap="round"/>`,
+        angry: `<path d="M52 80 Q60 73 68 80" stroke="#8f4752" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+        intense: `<ellipse cx="60" cy="79" rx="6" ry="4.5" fill="#8f4752"/>`,
+        smirk: `<path d="M53 78 Q60 80 69 75" stroke="#b75f73" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+        dramatic: `<path d="M50 80 Q60 86 70 80" stroke="#b75f73" stroke-width="2.4" fill="none" stroke-linecap="round"/>`,
+        grin: `<path d="M48 77 Q60 87 72 77" stroke="#8f4752" stroke-width="2.4" fill="none" stroke-linecap="round"/>`,
+        talkative: `<ellipse cx="60" cy="79" rx="5.2" ry="3.8" fill="#b75f73"/>`
+      };
+
+      const accessoryMap = {
+        halo: `<ellipse cx="60" cy="18" rx="20" ry="7" fill="none" stroke="${line}" stroke-width="3" opacity="0.8"/>`,
+        clip: `<rect x="77" y="38" width="10" height="6" rx="3" fill="${line}" />`,
+        glasses: `<rect x="40" y="53" width="16" height="11" rx="5" fill="none" stroke="#506986" stroke-width="2"/><rect x="64" y="53" width="16" height="11" rx="5" fill="none" stroke="#506986" stroke-width="2"/><path d="M56 58 H64" stroke="#506986" stroke-width="2" stroke-linecap="round"/>`,
+        earring: `<circle cx="82" cy="68" r="2.5" fill="#f2b25d" />`,
+        crown: `<path d="M44 24 L52 11 L60 21 L68 11 L76 24" fill="none" stroke="${line}" stroke-width="3" stroke-linejoin="round"/><path d="M42 25 H78" stroke="${line}" stroke-width="3" stroke-linecap="round"/>`,
+        headset: `<path d="M40 54 C40 44 48 36 60 36 C72 36 80 44 80 54" fill="none" stroke="#506986" stroke-width="3"/><rect x="36" y="54" width="6" height="13" rx="3" fill="#506986"/><rect x="78" y="54" width="6" height="13" rx="3" fill="#506986"/>`,
+        none: ``
+      };
+
+      return `
+        <div class="${avatarClass}">
+          <svg class="avatar-svg" viewBox="0 0 120 120" aria-hidden="true">
+            <rect x="10" y="10" width="100" height="100" rx="30" fill="white" stroke="${line}" stroke-width="2" />
+            <circle cx="60" cy="60" r="43" fill="${frame}" />
+            <circle cx="60" cy="38" r="18" fill="${accent}" opacity="0.18" />
+            <path d="M28 104 C32 83 45 74 60 74 C75 74 88 83 92 104" fill="${topColor}" />
+            <rect x="54" y="69" width="12" height="14" rx="5" fill="${skin}" />
+            ${faceMap[profile.face] || faceMap.oval}
+            ${hairMap[profile.hairStyle] || hairMap.short}
+            ${eyesMap[profile.mood] || eyesMap.calm}
+            ${mouthMap[profile.mood] || mouthMap.calm}
+            ${accessoryMap[profile.accessory] || ""}
+            <circle cx="33" cy="28" r="3" fill="${line}" opacity="0.18" />
+            <circle cx="91" cy="86" r="4" fill="${line}" opacity="0.15" />
+          </svg>
+          <div class="avatar-code">${role.memeCode}</div>
+        </div>
+      `;
+    }
+
+    function renderHome() {
+      const featuredRoles = [ROLE_MAP.cold, ROLE_MAP.fakeawake, ROLE_MAP.ego].filter(Boolean);
+      const memeHighlights = [
+        { code: "OJBK", label: "都可以，但别真问我" },
+        { code: "PFLA", label: "表面没事，内心破防" },
+        { code: "YDLD", label: "已读，但先冷一下" },
+        { code: "NSBJ", label: "你随便，其实很在意" },
+        { code: "BEBE", label: "意难平专用频道" },
+        { code: "CWCY", label: "查无此人式潜水" },
+        { code: "EMOO", label: "深夜情绪循环播放" },
+        { code: "JYYB", label: "这笔账我先记下" },
+        { code: "NSSQ", label: "脑内已经全盘推演" },
+        { code: "YYGQ", label: "一句话阴阳到位" }
+      ];
+      return `
+        <div class="home-shell">
+          <section class="hero">
+            <div class="hero-layout">
+              <div class="hero-copy">
+                <span class="eyebrow">NBTI · 年轻人迷惑人格图鉴</span>
+                <h1>NBTI</h1>
+              <div class="hero-subtitle">年轻人的社交迷惑人格测试</div>
+              <div class="hero-main-flow">
+                <p>NBTI 不走一本正经下定义那套，更像是把嘴硬、冷处理、内耗、上头这些日常状态，整理成一份看得懂也有点好笑的角色档案。你可以先逛图鉴，再做 20 题，最后拿到一个更像成品报告的结果页。</p>
+                <div class="hero-badges">
+                  <span class="hero-badge">20 个角色档案</span>
+                  <span class="hero-badge">24 题题库随机抽 20 题</span>
+                  <span class="hero-badge">支持离线直接打开</span>
+                </div>
+                <div class="cta-row">
+                  <button class="button" onclick="startQuiz()">开始 NBTI 测试</button>
+                  <button class="ghost-button" onclick="showGallery('home')">浏览全部角色</button>
+                </div>
+                <div class="hero-stat-strip">
+                  <div class="hero-stat">
+                    <strong>20</strong>
+                    <span>迷惑角色档案</span>
+                  </div>
+                  <div class="hero-stat">
+                    <strong>24</strong>
+                    <span>题库存量</span>
+                  </div>
+                  <div class="hero-stat">
+                    <strong>20</strong>
+                    <span>本次作答题数</span>
+                  </div>
+                  <div class="hero-stat">
+                    <strong>3D</strong>
+                    <span>结果属性画像</span>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-inline-note">
+                <span><strong>适合谁：</strong>想先玩一玩，也想看起来像正经测试的人</span>
+                  <span><strong>怎么开始：</strong>直接测，或者先去图鉴页逛一圈</span>
+                </div>
+              </div>
+              <div class="hero-visual">
+                <div class="hero-visual-card hero-visual-main">
+                  <div class="hero-visual-title">角色预览</div>
+                  <div class="hero-visual-stack">
+                    ${featuredRoles.map((role) => `
+                      <div class="hero-visual-person">
+                        <div>${renderAvatar(role)}</div>
+                        <div>
+                          <h3>${role.name}</h3>
+                          <p>${role.family} · ${role.memeCode} · ${role.code}</p>
+                        </div>
+                      </div>
+                    `).join("")}
+                  </div>
+                </div>
+                <div class="hero-visual-card hero-visual-note">
+                  <strong>像测试产品，也保留一点梗感</strong>
+                  <span>结果页会把角色、标签、三维属性和更完整的人物说明一起给到你，观感上更像一份认真做过排版的测试报告，不只是弹一句结果就结束。</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="meme-strip">
+            <div class="meme-strip-head">
+              <div>
+                <h2>一些熟悉的网络状态</h2>
+              </div>
+              <p>底部不再放长说明，换成一组更轻的梗词提示，让页面有内容，但看起来还是干净。</p>
+            </div>
+            <div class="meme-strip-cloud">
+              ${memeHighlights.map((item) => `
+                <span class="meme-pill"><strong>${item.code}</strong>${item.label}</span>
+              `).join("")}
+            </div>
+            <div class="meme-strip-footer">这些梗词不是结果本身，只是首页先给你一个气质预告。真正的角色归类，还是等你做完 20 题再揭晓。</div>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderQuiz() {
+      const question = state.selectedQuestions[state.currentQuestionIndex];
+      if (!question) {
+        return renderError("当前题目加载失败，请重新开始测试");
+      }
+
+      return `
+        <section class="question-card">
+          <div class="toolbar">
+            <div>
+              <h2>答题中</h2>
+              <div class="desc">别想太久，第一反应往往最接近你真正的迷惑体质</div>
+            </div>
+            <button class="ghost-button" onclick="goHome()">返回首页</button>
+          </div>
+          ${renderProgress()}
+          <div class="question-title">${question.question}？</div>
+          <div class="options">
+            ${question.options.map((option, index) => `
+              <button class="option" onclick="answerQuestion(${index})">
+                <span class="option-index">${LETTERS[index]}</span>
+                <span class="option-text">${option.text}</span>
+              </button>
+            `).join("")}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderStatItem(label, value) {
+      return `
+        <div class="stat-item">
+          <div class="stat-label">${label}</div>
+          <div class="stat-track"><div class="stat-fill" style="width: ${value}%"></div></div>
+          <div class="stat-value">${value}%</div>
+        </div>
+      `;
+    }
+
+    function renderDetail() {
+      const role = ROLE_MAP[state.selectedRoleId];
+      if (!role) {
+        return renderError("角色详情加载失败，请返回重试");
+      }
+
+      return `
+        <div class="detail-page">
+          <section class="detail-hero">
+            <div class="detail-avatar">${renderAvatar(role, "xlarge")}</div>
+            <div class="detail-meta">
+              <div class="eyebrow">NBTI 角色档案</div>
+              <h2>${role.name}</h2>
+              <div class="role-family">${role.family}</div>
+              <div class="role-code">角色代码：${role.memeCode}</div>
+              <div class="micro-tag" style="margin-top: 10px;">迷惑标签：${role.code}</div>
+              <p>${role.description}</p>
+              <div class="detail-actions">
+                <button class="ghost-button" onclick="backFromDetail()">返回上一页</button>
+                <button class="ghost-button" onclick="goHome()">返回首页</button>
+                <button class="button" onclick="startQuiz()">开始测试</button>
+              </div>
+            </div>
+          </section>
+
+          <div class="detail-grid">
+            <section class="detail-card">
+              <h3>角色概览</h3>
+              <div class="quote-box">“${role.quote}”</div>
+              <div class="detail-copy">这个角色最核心的气质是：${role.description}。</div>
+              <div class="detail-copy">如果把它放进真实关系里来看，通常会表现为 ${role.socialTip}。但一旦状态失衡，也容易出现 ${role.warning} 这样的结果。</div>
+              <div class="detail-subgroup">
+                <div class="detail-subtitle">属性画像</div>
+                ${renderStatItem("情绪稳定性", role.stability)}
+                ${renderStatItem("逻辑自洽度", role.logic)}
+                ${renderStatItem("社交伤害力", role.damage)}
+              </div>
+            </section>
+
+            <section class="detail-card">
+              <h3>核心特点</h3>
+              <div class="detail-split">
+                <div class="detail-subgroup">
+                  <div class="detail-subtitle">代表行为</div>
+                  <div class="detail-list">
+                    ${role.behaviors.map((item) => `<div class="detail-list-item">${item}</div>`).join("")}
+                  </div>
+                </div>
+                <div class="detail-subgroup">
+                  <div class="detail-subtitle">关系表现</div>
+                  <div class="detail-list">
+                    ${role.relationshipStyle.map((item) => `<div class="detail-list-item">${item}</div>`).join("")}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="detail-card">
+              <h3>关系与场景</h3>
+              <div class="detail-copy">当这个角色进入日常关系以后，很多问题并不是突然发生的，而是在一些重复场景里慢慢累积出来的。下面这些场景，通常就是最容易把这类人格特质放大的地方。</div>
+              <div class="detail-subgroup">
+                <div class="detail-subtitle">高发场景</div>
+                <div class="detail-list">
+                  ${role.triggerScenes.map((item) => `<div class="detail-list-item">${item}</div>`).join("")}
+                </div>
+              </div>
+            </section>
+
+            <section class="detail-card">
+              <h3>建议与提醒</h3>
+              <div class="detail-split">
+                <div class="detail-subgroup">
+                  <div class="detail-subtitle">自救建议</div>
+                  <div class="detail-list">
+                    ${role.selfHelpTips.map((item) => `<div class="detail-list-item">${item}</div>`).join("")}
+                  </div>
+                </div>
+                <div class="detail-subgroup">
+                  <div class="detail-subtitle">相处提醒</div>
+                  <div class="detail-list">
+                    <div class="detail-list-item"><strong>相处提示：</strong>${role.socialTip}</div>
+                    <div class="detail-list-item"><strong>风险提示：</strong>${role.warning}</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderResult() {
+      const role = ROLE_MAP[state.resultRoleId];
+      if (!role) {
+        return renderError("结果角色缺失，请重新开始测试");
+      }
+
+      const rankedRoles = getRankedRoles().slice(0, 3);
+      const summary = buildResultSummary(role);
+
+      return `
+        <div class="result-layout">
+          <section class="result-card">
+            <div class="role-top">
+              <div class="role-badge-wrap">${renderAvatar(role, "large")}</div>
+              <div>
+                <div class="eyebrow">角色锁定</div>
+                <h2>${role.name}</h2>
+                <div class="role-family">${role.family}</div>
+                <div class="role-code">角色代码：${role.memeCode}</div>
+                <div class="micro-tag" style="margin-top: 10px;">迷惑标签：${role.code}</div>
+              </div>
+            </div>
+            <div class="role-desc">${role.description}</div>
+            <div class="stats-grid">
+              ${renderStatItem("情绪稳定性", role.stability)}
+              ${renderStatItem("逻辑自洽度", role.logic)}
+              ${renderStatItem("社交伤害力", role.damage)}
+            </div>
+            <div class="result-actions" style="margin-top: 24px;">
+              <button class="button" onclick="restartQuiz()">再测一次</button>
+              <button class="ghost-button" onclick="openRoleDetail('${role.id}', 'result')">查看角色详情</button>
+              <button class="ghost-button" onclick="showGallery('result')">查看角色图鉴</button>
+            </div>
+          </section>
+
+          <div style="display: grid; gap: 16px;">
+            <section class="summary-card">
+              <h3>系统结论</h3>
+              <div class="summary-copy">${summary}</div>
+              <div class="summary-actions" style="margin-top: 18px;">
+                <button class="ghost-button" onclick="copyShareText()">复制结果文案</button>
+              </div>
+            </section>
+
+            <section class="rank-card">
+              <h3>高频伴生角色</h3>
+              <div class="top-grid">
+                ${rankedRoles.map((item, index) => `
+                  <div class="top-item">
+                    <div class="top-left">
+                      <div class="rank-no">${index + 1}</div>
+                      <div>
+                        <div>${item.role.name}</div>
+                        <div class="top-sub">${item.role.family}</div>
+                      </div>
+                    </div>
+                    <div class="score-pill">${item.total} 分</div>
+                  </div>
+                `).join("")}
+              </div>
+            </section>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGalleryCard(role) {
+      return `
+        <article class="gallery-card" onclick="openRoleDetail('${role.id}', '${state.currentView === "gallery" ? "gallery" : "home"}')">
+          <div class="card-top">
+            <div class="card-title">
+              ${renderAvatar(role)}
+              <div class="card-title-text">
+                <div class="card-name">${role.name}</div>
+                <div class="card-family">${role.family}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-meta-row">
+            <div class="meta-chip code">代码 · ${role.memeCode}</div>
+            <div class="meta-chip label">标签 · ${role.code}</div>
+            <div class="meta-chip family">${role.family}</div>
+          </div>
+          <p class="gallery-desc">${role.description}</p>
+          <div class="micro-tag" style="margin-top: 12px;">点击查看详情档案</div>
+          <div class="gallery-stats">
+            <div class="gallery-stat">
+              <span>稳定性</span>
+              <div class="stat-track"><div class="stat-fill" style="width: ${role.stability}%"></div></div>
+              <span>${role.stability}%</span>
+            </div>
+            <div class="gallery-stat">
+              <span>自洽度</span>
+              <div class="stat-track"><div class="stat-fill" style="width: ${role.logic}%"></div></div>
+              <span>${role.logic}%</span>
+            </div>
+            <div class="gallery-stat">
+              <span>伤害力</span>
+              <div class="stat-track"><div class="stat-fill" style="width: ${role.damage}%"></div></div>
+              <span>${role.damage}%</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderGallery() {
+      return `
+        <section class="panel">
+          <div class="toolbar">
+            <div>
+              <h2>NBTI 角色图鉴</h2>
+              <div class="desc">这里收录了本次测试的全部 20 个迷惑角色。点击任意卡片，可以进入完整角色详情页查看大头像、代表行为和经典语录。</div>
+            </div>
+            <div class="gallery-actions">
+              <button class="ghost-button" onclick="backFromGallery()">返回上一页</button>
+              <button class="button" onclick="startQuiz()">开始测试</button>
+            </div>
+          </div>
+          <div class="gallery-grid">
+            ${APP_DATA.roles.map(renderGalleryCard).join("")}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderError(message) {
+      return `
+        <section class="panel">
+          <h2>系统短暂抽风</h2>
+          <div class="desc">${message}</div>
+          <div class="cta-row">
+            <button class="button" onclick="goHome()">返回首页</button>
+          </div>
+        </section>
+      `;
+    }
+
+    function render() {
+      const app = document.getElementById("app");
+      if (!app) {
+        return;
+      }
+
+      let viewMarkup = "";
+      switch (state.currentView) {
+        case "quiz":
+          viewMarkup = renderQuiz();
+          break;
+        case "detail":
+          viewMarkup = renderDetail();
+          break;
+        case "result":
+          viewMarkup = renderResult();
+          break;
+        case "gallery":
+          viewMarkup = renderGallery();
+          break;
+        case "home":
+        default:
+          viewMarkup = renderHome();
+      }
+
+      app.innerHTML = `${renderNavbar()}${viewMarkup}`;
+    }
+
+    if (typeof window.addEventListener === "function") {
+      window.addEventListener("popstate", (event) => {
+        applyNavState(event.state || { currentView: "home", previousView: "home", selectedRoleId: "", resultRoleId: "", shareText: "" });
+        render();
+      });
+    }
+
+    render();
+    syncHistory("replace");
+    window.startQuiz = startQuiz;
+    window.goHome = goHome;
+    window.showGallery = showGallery;
+    window.backFromGallery = backFromGallery;
+    window.openRoleDetail = openRoleDetail;
+    window.backFromDetail = backFromDetail;
+    window.restartQuiz = restartQuiz;
+    window.answerQuestion = answerQuestion;
+    window.copyShareText = copyShareText;
+  </script>
+</body>
+</html>
